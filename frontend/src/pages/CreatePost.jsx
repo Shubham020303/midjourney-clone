@@ -14,20 +14,33 @@ const CreatePost = () => {
 	})
 	const [generatingImg, setGeneratingImg] = useState(false)
 	const [loading, setLoading] = useState(false)
+	const OCTOAI_API_KEY = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNkMjMzOTQ5In0.eyJzdWIiOiIyOTc5Mzc3YS1kODJiLTQ4NzctYjc2Mi0xZDc3M2I0OWM4ZjAiLCJ0eXBlIjoidXNlckFjY2Vzc1Rva2VuIiwidGVuYW50SWQiOiI1YzJjOGZiMS0zYzM1LTQ0Y2MtYjIzNC0yYmM5ZmFhNTVkMTkiLCJ1c2VySWQiOiI5NGYwZmQ5Ni1hZmZmLTQ2YTUtOTQ3Ni1hY2UwZThhOTBkYzMiLCJyb2xlcyI6WyJGRVRDSC1ST0xFUy1CWS1BUEkiXSwicGVybWlzc2lvbnMiOlsiRkVUQ0gtUEVSTUlTU0lPTlMtQlktQVBJIl0sImF1ZCI6IjNkMjMzOTQ5LWEyZmItNGFiMC1iN2VjLTQ2ZjYyNTVjNTEwZSIsImlzcyI6Imh0dHBzOi8vaWRlbnRpdHkub2N0b21sLmFpIiwiaWF0IjoxNzAyNjU4MTY5fQ.Yd8DHj1adkjxUMcaJN3eUl5ov1o0Xt_YkWgZsPVEolfRNPgw6ofmCnbzJkgfClmoEm7UCBUad8tvYa1NiBxTh-e_zhfFCm3-pBGy8mk68pYi_McEbmSs8QqBVHDd2AbnbD7XIqbti8Cmo8IM1bEb1gMmyqxCphyMikVUKySv-5OOOqxsh_OBqPJiZ1a5N789Kdm0QtWdV6aPzw-wKazUqzRajbjoS7SJ1pKt-EWDjNHuP_1SKK5a9Rs6en-A6tPoMWkweDVIRLP9Uw9oTyhA-wxEzFFzE5cbncHpXylJTD3zNrnWd5hS2icYbcJ5bhybcR_bpSFR3wpub4Rn5xjtyg"
 
 	const generateImage = async () => {
 		if (form.prompt) {
 			try {
 				setGeneratingImg(true)
-				const response = await fetch("https://midjourney-2-0.onrender.com/api/v1/dalle", {
-					method: "POST",
+				await fetch("https://image.octoai.run/generate/sdxl", {
+					method: 'POST',
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						"Authorization": "Bearer " + OCTOAI_API_KEY
 					},
-					body: JSON.stringify({ prompt: form.prompt })
+					body: JSON.stringify({ prompt: form.prompt }),
+					redirect: 'follow'
 				})
-				const data = await response.json()
-				setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` })
+					.then(response => response.json())
+					.then(result => setForm({ ...form, photo: `data:image/jpeg;base64,${result.images[0].image_b64}` }))
+					.catch(error => console.log('error', error));
+				// const response = await fetch("https://midjourney-2-0.onrender.com/api/v1/dalle", {
+				// 	method: "POST",
+				// 	headers: {
+				// 		"Content-Type": "application/json"
+				// 	},
+				// 	body: JSON.stringify({ prompt: form.prompt })
+				// })
+				// const data = await response.json()
+				// setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` })
 			} catch (error) {
 				alert(error)
 			} finally {
