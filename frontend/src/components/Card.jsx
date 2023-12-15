@@ -1,12 +1,11 @@
 import React from 'react'
 
-import { download } from '../assets'
 import { downloadImage } from '../utils'
 
 const Card = ({ _id, name, prompt, photo }) => {
 	return (
 		<div className='rounded-xl group relative shadow-card hover:shadow-cardhover card'>
-			<img src={photo} className='w-full h-auto object-cover rounded-xl' alt={prompt} />
+			<img src={photo} className='w-full h-auto object-cover rounded-xl' alt={prompt} loading='lazy' />
 			<div className='group-hover:flex flex-col max-h-[94.5%] hidden absolute bottom-0 left-0 right-0 bg-[#10131f] m-2 p-4 rounded-md'>
 				<p className='text-white text-md overflow-y-auto prompt'>{prompt}</p>
 				<div className='mt-5 flex justify-between items-center gap-2'>
@@ -17,7 +16,16 @@ const Card = ({ _id, name, prompt, photo }) => {
 						<p className='text-white text-sm'>{name}</p>
 					</div>
 					<button type='button' onClick={() => downloadImage(_id, photo)} className='outline-none bg-transparent border-none'>
-						<img src={download} alt='Download' className='w-6 h-6 object-contain invert' />
+						<svg
+							fill="currentColor"
+							className='w-6 h-6 object-contain invert'
+							viewBox="0 0 16 16"
+						>
+							<path
+								fillRule="evenodd"
+								d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"
+							/>
+						</svg>
 					</button>
 				</div>
 			</div>

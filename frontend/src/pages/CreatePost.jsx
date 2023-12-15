@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { preview } from '../assets'
 import { FormField, Loader } from '../components'
 import { getRandomPrompt } from "../utils"
 
@@ -63,7 +62,7 @@ const CreatePost = () => {
 				setLoading(false)
 			}
 		}
-		else{
+		else {
 			alert("Please enter a prompt and generate an image")
 		}
 	}
@@ -109,7 +108,14 @@ const CreatePost = () => {
 						{form.photo ? (
 							<img src={form.photo} alt={form.prompt} className='w-full h-full object-contain' />
 						) : (
-							<img src={preview} alt='preview' className='w-9/12 h-9/12 object-contain opacity-40' />
+							<svg
+								fill="currentColor"
+								className='w-9/12 h-9/12 object-contain opacity-40'
+								viewBox="0 0 16 16"
+							>
+								<path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+								<path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54A.505.505 0 0 1 1 12.5v-9a.5.5 0 0 1 .5-.5z" />
+							</svg>
 						)}
 
 						{generatingImg && (
@@ -132,7 +138,7 @@ const CreatePost = () => {
 					</button>
 				</div>
 			</form>
-		</section>
+		</section >
 	)
 }
 
