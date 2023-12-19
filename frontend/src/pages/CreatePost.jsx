@@ -20,27 +20,27 @@ const CreatePost = () => {
 		if (form.prompt) {
 			try {
 				setGeneratingImg(true)
-				await fetch("https://image.octoai.run/generate/sdxl", {
-					method: 'POST',
-					headers: {
-						"Content-Type": "application/json",
-						"Authorization": "Bearer " + OCTOAI_API_KEY
-					},
-					body: JSON.stringify({ prompt: form.prompt }),
-					redirect: 'follow'
-				})
-					.then(response => response.json())
-					.then(result => setForm({ ...form, photo: `data:image/jpeg;base64,${result.images[0].image_b64}` }))
-					.catch(error => console.log('error', error));
-				// const response = await fetch("https://midjourney-2-0.onrender.com/api/v1/dalle", {
-				// 	method: "POST",
+				// await fetch("https://image.octoai.run/generate/sdxl", {
+				// 	method: 'POST',
 				// 	headers: {
-				// 		"Content-Type": "application/json"
+				// 		"Content-Type": "application/json",
+				// 		"Authorization": "Bearer " + OCTOAI_API_KEY
 				// 	},
-				// 	body: JSON.stringify({ prompt: form.prompt })
+				// 	body: JSON.stringify({ prompt: form.prompt }),
+				// 	redirect: 'follow'
 				// })
-				// const data = await response.json()
-				// setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` })
+				// 	.then(response => response.json())
+				// 	.then(result => setForm({ ...form, photo: `data:image/jpeg;base64,${result.images[0].image_b64}` }))
+				// 	.catch(error => console.log('error', error));
+				const response = await fetch("https://midjourney-2-0.onrender.com/api/v1/dalle", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({ prompt: form.prompt })
+				})
+				const data = await response.json()
+				setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` })
 			} catch (error) {
 				alert(error)
 			} finally {
