@@ -4,7 +4,7 @@ import { Card, FormField, Loader } from "../components"
 
 const RenderCards = ({ data, title }) => {
 	if (data?.length > 0) {
-		return data.map((post) => <Card key={post._id} {...post} />)
+		return data.map((post, index) => <Card key={index} {...post} />)
 	}
 	return (
 		<h2 className='mt-5 font-bold text-[#6469ff] text-xl uppercase'>{title}</h2>
@@ -14,7 +14,9 @@ const RenderCards = ({ data, title }) => {
 const Home = () => {
 
 	const [loading, setLoading] = useState(false)
+	const [loading2, setLoading2] = useState(false)
 	const [allPosts, setAllPosts] = useState(null)
+	const [page, setPage] = useState(1)
 	const [searchText, setSearchText] = useState("")
 	const [searchedResults, setSearchedResults] = useState(null)
 	const [searchTimeout, setSearchTimeout] = useState(null)
@@ -24,7 +26,7 @@ const Home = () => {
 			setLoading(true)
 
 			try {
-				const response = await fetch("https://midjourney-2-0.onrender.com/api/v1/post", {
+				const response = await fetch("https://midjourney-2-0.onrender.com/api/v1/post?page=0", {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json"
@@ -43,6 +45,31 @@ const Home = () => {
 		}
 		fetchPosts()
 	}, [])
+
+	window.onscroll = async () => {
+		if ((document.body.scrollHeight - window.scrollY < 700) && loading2 === false && allPosts !== null) {
+			setLoading2(true)
+
+			try {
+				const response = await fetch("https://midjourney-2-0.onrender.com/api/v1/post?page=" + page, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json"
+					},
+				})
+
+				if (response.ok) {
+					const result = await response.json()
+					setAllPosts(allPosts.concat(result.data.reverse()))
+					setPage(page + 1)
+				}
+			} catch (error) {
+				alert(error)
+			} finally {
+				setLoading2(false)
+			}
+		}
+	}
 
 	const handleSearchChange = (e) => {
 		clearTimeout(searchTimeout)

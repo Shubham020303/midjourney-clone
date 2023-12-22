@@ -2,17 +2,16 @@ import React from 'react'
 
 import { downloadImage } from '../utils'
 
-const Card = ({ _id, name, prompt, photo }) => {
+const Card = ({ _id, name, prompt, negativePrompt, photo }) => {
 	return (
-		<div className='rounded-xl group relative shadow-card hover:shadow-cardhover card'>
-			<img src={photo} className='w-full h-full object-cover rounded-xl' alt={prompt} loading='lazy' />
+		<div className='rounded-xl group relative shadow-card hover:shadow-cardhover card w-full h-full min-w-full min-h-full'>
+			<img src={typeof (photo) === "object" ? photo[0] : photo} className='w-full h-full min-w-full min-h-full object-cover rounded-xl' alt={prompt} loading='lazy' />
 			<div className='group-hover:flex flex-col max-h-[94.5%] hidden absolute bottom-0 left-0 right-0 bg-[#10131f] m-2 p-4 rounded-md'>
-				<p className='text-white text-md overflow-y-auto prompt'>{prompt}</p>
+				<p className='text-white text-md overflow-y-auto prompt descTruncate'>{prompt}</p>
+				{negativePrompt && <p className='text-gray-400 text-xs mt-2 overflow-y-auto prompt truncate'>{negativePrompt}</p>}
 				<div className='mt-5 flex justify-between items-center gap-2'>
 					<div className='flex items-center gap-2'>
-						<div className='w-7 h-7 aspect-square rounded-full object-cover bg-green-700 flex justify-center items-center text-xs text-white font-bold'>
-							{name[0]}
-						</div>
+						<img src={"https://api.dicebear.com/7.x/initials/svg?seed=" + name + "&radius=50&scale=75"} className='w-7 h-7 aspect-square rounded-full object-cover' />
 						<p className='text-white text-sm'>{name}</p>
 					</div>
 					<button type='button' onClick={() => downloadImage(_id, photo)} className='outline-none bg-transparent border-none'>
