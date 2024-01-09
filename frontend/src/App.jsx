@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, Route, BrowserRouter as Router, Routes } from "react-router-dom"
 
 // Pages
-import { CreatePost, Home } from './pages'
+import { CreatePost, Home, DetailedPost } from './pages'
 
 const App = () => {
 	return (
@@ -28,6 +28,7 @@ const App = () => {
 				<Routes>
 					<Route path='/' element={<Home />} />
 					<Route path='/create-post' element={<CreatePost />} />
+					<Route path='/post/:id' element={<DetailedPost />} />
 				</Routes>
 			</main>
 			<div className='fixed bottom-0 left-0 w-full flex justify-between items-center bg-white sm:px-8 px-4 py-1 border-t border-t-[#e6ebf4]'>

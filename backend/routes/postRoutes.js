@@ -1,4 +1,3 @@
-import { v2 as cloudinary } from "cloudinary";
 import * as dotenv from "dotenv";
 import express from "express";
 
@@ -8,23 +7,26 @@ dotenv.config()
 
 const router = express.Router()
 
-cloudinary.config({
-	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-	api_key: process.env.CLOUDINARY_API_KEY,
-	api_secret: process.env.CLOUDINARY_API_SECRET,
-})
-
 // Get all posts
 
 router.route("/").get(async (req, res) => {
-	try {
-		const posts = await Post.find({});
-		let page = req.query.page
-		let finalPosts = posts.slice(posts.length - 10 * (page + 1), posts.length - 10 * page)
-		res.status(201).json({ success: true, data: finalPosts })
-	} catch (error) {
-		res.status(500).json({ success: false, message: error })
-	}
+
+	const posts = await Post.find();
+	let page = req.query.page
+	let pageSize = 10;
+	let startIndex = (page - 1) * pageSize;
+	let endIndex = page * pageSize;
+	let sortedPosts = posts.slice().reverse()
+	let finalPosts = sortedPosts.slice(startIndex, endIndex)
+	res.status(201).json({ success: true, data: finalPosts })
+})
+
+// Get individual post
+
+router.route("/getPost").get(async (req, res) => {
+	let id = req.query.id
+	const post = await Post.find({ _id: id });
+	res.status(201).json({ success: true, data: post })
 })
 
 // Create a post
@@ -36,8 +38,17 @@ router.route("/").post(async (req, res) => {
 		const images = []
 		for (let index = 0; index < photo.length; index++) {
 			const element = photo[index];
-			const result = await cloudinary.uploader.upload("data:image/jpeg;base64," + element.image_b64, { secure: true })
-			images.push(result.secure_url)
+			let formdata = new FormData()
+			formdata.append("image", element.image_b64)
+			// formdata.append("name", (name + "-" + prompt + "-" + (index + 1)))
+			const result = await fetch("https://api.imgbb.com/1/upload?key=" + process.env.IMGBB_API_KEY, {
+				method: 'POST',
+				redirect: 'follow',
+				body: formdata
+			})
+				.then(response => response.json())
+				.then(result => images.push(result.data.image.url))
+				.catch(error => console.log('error', error));
 		}
 
 		const newPost = await Post.create({

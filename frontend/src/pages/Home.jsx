@@ -26,7 +26,7 @@ const Home = () => {
 			setLoading(true)
 
 			try {
-				const response = await fetch("https://midjourney-2-0.onrender.com/api/v1/post?page=0", {
+				const response = await fetch("https://midjourney-2-0.onrender.com/api/v1/post?page=" + page, {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json"
@@ -35,7 +35,8 @@ const Home = () => {
 
 				if (response.ok) {
 					const result = await response.json()
-					setAllPosts(result.data.reverse())
+					setAllPosts(result.data)
+					setPage(page + 1)
 				}
 			} catch (error) {
 				alert(error)
@@ -60,7 +61,7 @@ const Home = () => {
 
 				if (response.ok) {
 					const result = await response.json()
-					setAllPosts(allPosts.concat(result.data.reverse()))
+					setAllPosts(allPosts.concat(result.data))
 					setPage(page + 1)
 				}
 			} catch (error) {
