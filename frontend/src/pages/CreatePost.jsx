@@ -262,7 +262,7 @@ const CreatePost = () => {
 					<div className='lg:w-1/2 lg:mb-10'>
 						<div className='lg:w-full lg:h-full w-full relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-3 h-54 flex justify-center items-center'>
 							{form.photo ? (
-								<img src={"data:image/jpeg;base64," + (bigImage === "" ? form.photo[0].image_b64 : bigImage)} alt={form.prompt} className='w-full h-full object-cover rounded-md' />
+								<img src={"data:image/jpeg;base64," + (bigImage === "" ? typeof (form.photo) === "object" ? form.photo[0].image_b64 : form.photo : bigImage)} alt={form.prompt} className='w-full h-full object-cover rounded-md' />
 							) : (
 								<svg
 									fill="currentColor"
@@ -280,9 +280,9 @@ const CreatePost = () => {
 								</div>
 							)}
 						</div>
-						{form.photo.length > 1 && (
+						{typeof (form.photo) === "object" && form.photo?.length > 1 ? (
 							<div className='mt-3 flex items-center gap-3 mx-auto w-fit'>
-								{form.photo.map((item, index) => (
+								{form.photo?.map((item, index) => (
 									<div key={index} className={'relative border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-1 flex justify-center items-center cursor-pointer ' + (bigImage === item.image_b64 ? "bg-blue-500" : "bg-gray-50")} onClick={() => {
 										setBigImage(item.image_b64)
 									}}>
@@ -295,6 +295,8 @@ const CreatePost = () => {
 									</div>
 								))}
 							</div>
+						) : (
+							<></>
 						)}
 					</div>
 				</div>
