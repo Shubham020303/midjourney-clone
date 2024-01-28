@@ -15,7 +15,7 @@ const DetailedPost = () => {
 			scrollTo(0, 0)
 
 			try {
-				const response = await fetch("# https://midjourney-2-0.onrender.com/api/v1/post/getPost?id=" + id, {
+				const response = await fetch("https://midjourney-2-0.onrender.com/api/v1/post/getPost?id=" + id, {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json"

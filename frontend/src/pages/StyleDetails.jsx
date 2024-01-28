@@ -18,7 +18,7 @@ const StyleDetails = () => {
 			scrollTo(0, 0)
 
 			try {
-				const response = await fetch("# https://midjourney-2-0.onrender.com/api/v1/post/getStyle?style=" + stylePreset, {
+				const response = await fetch("https://midjourney-2-0.onrender.com/api/v1/post/getStyle?style=" + stylePreset, {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json"
