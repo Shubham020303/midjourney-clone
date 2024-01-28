@@ -29,6 +29,14 @@ router.route("/getPost").get(async (req, res) => {
 	res.status(201).json({ success: true, data: post })
 })
 
+// Get style preset
+
+router.route("/getStyle").get(async (req, res) => {
+	let style = req.query.style
+	const posts = await Post.find({ stylePreset: style });
+	res.status(201).json({ success: true, data: posts })
+})
+
 // Create a post
 
 router.route("/").post(async (req, res) => {

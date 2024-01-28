@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import { Loader } from '../components'
+import { downloadImage } from '../utils'
+
 const DetailedPost = () => {
 	const [loading, setLoading] = useState(false)
 	const [post, setPost] = useState(null)
+	const { id } = useParams("id")
 
 	useEffect(() => {
 		const fetchPost = async () => {
 			setLoading(true)
+			scrollTo(0, 0)
 
 			try {
-				const response = await fetch("https://midjourney-2-0.onrender.com/api/v1/post/getPost?id=" + id, {
+				const response = await fetch("# https://midjourney-2-0.onrender.com/api/v1/post/getPost?id=" + id, {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json"
@@ -30,8 +34,6 @@ const DetailedPost = () => {
 		}
 		fetchPost()
 	}, [])
-
-	const { id } = useParams("id")
 
 	return (
 
@@ -124,35 +126,41 @@ const DetailedPost = () => {
 								</div>
 							</>
 						)}
-						<div>
-							<p className='text-gray-400'>Style</p>
-							<div className='flex items-center gap-3'>
-								<div className='border border-[#6469ff] bg-white rounded-lg p-2 px-6 mt-2'>
-									<p className='capitalize'>{post?.stylePreset}</p>
+						{post?.stylePreset && (
+							<div>
+								<p className='text-gray-400'>Style</p>
+								<div className='flex items-center gap-3'>
+									<div className='border border-[#6469ff] bg-white rounded-lg p-2 px-6 mt-2'>
+										<p className='capitalize'>{post?.stylePreset}</p>
+									</div>
+									<Link to={"/style/" + post?.stylePreset} target='_blank'>
+										<div className='mt-2 w-fit flex items-center gap-2 bg-[#6469ff] rounded-lg text-white p-3 cursor-pointer'>
+											<svg
+												stroke="currentColor"
+												fill="none"
+												strokeWidth={2}
+												viewBox="0 0 24 24"
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												className="h-4 w-4"
+											>
+												<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+												<polyline points="15 3 21 3 21 9" />
+												<line x1={10} y1={14} x2={21} y2={3} />
+											</svg>
+										</div>
+									</Link>
 								</div>
-								{/* <div className='mt-2 w-fit flex items-center gap-2 bg-[#6469ff] rounded-lg text-white p-3 cursor-pointer'>
-							<svg
-								stroke="currentColor"
-								fill="none"
-								strokeWidth={2}
-								viewBox="0 0 24 24"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								className="h-4 w-4"
-							>
-								<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-								<polyline points="15 3 21 3 21 9" />
-								<line x1={10} y1={14} x2={21} y2={3} />
-							</svg>
-						</div> */}
 							</div>
-						</div>
-						<div className='my-5'>
-							<p className='text-gray-400'>Dimensions</p>
-							<div className='border border-[#6469ff] bg-white rounded-lg p-2 px-3 mt-2'>
-								<p className='text-md font-medium'>{post?.dimensions}</p>
+						)}
+						{post?.dimensions && (
+							<div className='my-5'>
+								<p className='text-gray-400'>Dimensions</p>
+								<div className='border border-[#6469ff] bg-white rounded-lg p-2 px-3 mt-2'>
+									<p className='text-md font-medium'>{post?.dimensions}</p>
+								</div>
 							</div>
-						</div>
+						)}
 						<div className='my-5'>
 							<p className='text-gray-400'>Creator</p>
 							<div className='flex items-center gap-2 mt-2'>
@@ -178,7 +186,21 @@ const DetailedPost = () => {
 					</div>
 					<div className='lg:w-[70%] h-full grid lg:grid-cols-2 grid-cols-1 gap-3'>
 						{post?.photo.map((item, index) => (
-							<img src={item} key={index} className='rounded-lg' />
+							<div key={index} className='relative'>
+								<img src={item} className='rounded-lg' />
+								<button type='button' onClick={() => downloadImage(post?._id, item)} className='absolute bottom-4 right-4 outline-none bg-transparent border-none'>
+									<svg
+										fill="currentColor"
+										className='w-6 h-6 object-contain invert'
+										viewBox="0 0 16 16"
+									>
+										<path
+											fillRule="evenodd"
+											d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"
+										/>
+									</svg>
+								</button>
+							</div>
 						))}
 					</div>
 				</>

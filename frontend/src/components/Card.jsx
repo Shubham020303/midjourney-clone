@@ -1,12 +1,12 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { downloadImage } from '../utils'
 
 const Card = ({ _id, name, prompt, negativePrompt, photo }) => {
 	return (
 		<div className='rounded-xl group relative shadow-card hover:shadow-cardhover card w-full h-full min-w-full min-h-full'>
-			<NavLink to={"/post/" + _id}>
+			<Link to={"/post/" + _id}>
 				<img src={typeof (photo) === "object" ? photo[0] : photo} className='w-full h-full min-w-full min-h-full object-cover rounded-xl' alt={prompt} loading='lazy' />
 				<div className='group-hover:flex flex-col max-h-[94.5%] hidden absolute bottom-0 left-0 right-0 bg-[#10131f] m-2 p-4 rounded-md'>
 					<p className='text-white text-md overflow-y-auto prompt descTruncate'>{prompt}</p>
@@ -30,7 +30,7 @@ const Card = ({ _id, name, prompt, negativePrompt, photo }) => {
 						</button>
 					</div>
 				</div>
-			</NavLink>
+			</Link>
 		</div>
 	)
 }
